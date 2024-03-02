@@ -78,14 +78,18 @@ export const schemaQuery = new GraphQLSchema({
                 id: { type: new GraphQLNonNull(UUIDType) },
             },
             resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
-
-            const { id } = args;
-            const user = await prisma.user.findUnique({
-                    where: { id },
-                    });
-                    return user ;
-                },
+                try {
+                    const { id } = args;
+                    const user = await prisma.user.findUnique({ where: { id } });
+                    return user || null;
+                } catch (error) {
+                    console.error("Error fetching user:", error);
+                    return null;
+                }
+            },
         },
+
+
 
         profiles: {
             type: new GraphQLList(ProfileType),
