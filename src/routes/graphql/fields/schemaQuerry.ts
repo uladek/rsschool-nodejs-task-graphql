@@ -6,6 +6,8 @@ import { UUIDType } from "../types/uuid.js";
 import { UserType } from "../types/userstypes.js";
 import { ProfileType } from "../types/profiletypes.js";
 
+// const UserType: GraphQLObjectType
+
 export const schemaQuery = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -22,9 +24,7 @@ export const schemaQuery = new GraphQLSchema({
             type: MemberType,
             args: {
                 id: { type: new GraphQLNonNull(MemberTypeIdEnum) }
-
             },
-
             resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
             const { id } = args;
             const memberType = await prisma.memberType.findUnique({
@@ -40,12 +40,11 @@ export const schemaQuery = new GraphQLSchema({
         posts: {
             type: new GraphQLList(PostType),
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
-
             const posts = await prisma.post.findMany();
-
             return posts;
             },
             },
+
         post: {
             type: PostType,
             args: {
@@ -65,7 +64,6 @@ export const schemaQuery = new GraphQLSchema({
 
         users: {
             type: new GraphQLList(UserType),
-
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
 
             const users = await prisma.user.findMany();
@@ -79,20 +77,18 @@ export const schemaQuery = new GraphQLSchema({
             args: {
                 id: { type: new GraphQLNonNull(UUIDType) },
             },
-
             resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
 
             const { id } = args;
             const user = await prisma.user.findUnique({
                     where: { id },
                     });
-                    return user;
+                    return user ;
                 },
         },
 
         profiles: {
             type: new GraphQLList(ProfileType),
-
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
             const profiles = await prisma.profile.findMany();
 
@@ -105,7 +101,6 @@ export const schemaQuery = new GraphQLSchema({
             args: {
             id: { type: new GraphQLNonNull(UUIDType) },
             },
-
             resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
 
             const { id } = args;
@@ -115,7 +110,7 @@ export const schemaQuery = new GraphQLSchema({
 
             return profile;
             },
-            },
+        },
         },
     }),
 });
