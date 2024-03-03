@@ -1,14 +1,10 @@
 import { GraphQLList, GraphQLNonNull } from "graphql";
 import { MemberType, MemberTypeIdEnum } from "../types/membertypes.js";
-// import { PrismaClient } from "@prisma/client/index.js";
 import { PostType } from "../types/posttypes.js";
 import { UUIDType } from "../types/uuid.js";
 import { UserType } from "../types/userstypes.js";
 import { ProfileType } from "../types/profiletypes.js";
-
 import { PrismaClient } from "@prisma/client";
-
-
 
 
 export const queryFields = {
@@ -20,6 +16,7 @@ export const queryFields = {
             return memberTypes;
             },
         },
+
         memberType: {
             type: MemberType,
             args: {
@@ -37,6 +34,7 @@ export const queryFields = {
             }
         },
 
+
         posts: {
             type: new GraphQLList(PostType),
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
@@ -44,6 +42,7 @@ export const queryFields = {
             return posts;
             },
             },
+
 
         post: {
             type: PostType,
@@ -62,6 +61,7 @@ export const queryFields = {
             },
         },
 
+
         users: {
             type: new GraphQLList(UserType),
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
@@ -71,6 +71,7 @@ export const queryFields = {
             return users;
             },
         },
+
 
         user: {
             type: UserType,
@@ -91,8 +92,6 @@ export const queryFields = {
 
 
 
-
-
         profiles: {
             type: new GraphQLList(ProfileType),
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
@@ -101,6 +100,7 @@ export const queryFields = {
             return profiles;
             },
         },
+
 
         profile: {
             type: ProfileType,

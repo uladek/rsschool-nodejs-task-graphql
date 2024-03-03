@@ -11,8 +11,8 @@ export const ProfileType = new GraphQLObjectType({
         id: { type: UUIDType },
         isMale: { type: GraphQLBoolean },
         yearOfBirth: { type: GraphQLInt },
-        userId: { type: UUIDType },
-        memberTypeId: { type: MemberTypeIdEnum },
+        // userId: { type: UUIDType },
+        // memberTypeId: { type: MemberTypeIdEnum },
         memberType: {
             type: MemberType,
             resolve: async (parent: Profile, _, { prisma }: { prisma: PrismaClient }) => {
@@ -35,6 +35,16 @@ export const CreateProfileInput = new GraphQLInputObjectType({
         isMale: { type: new GraphQLNonNull(GraphQLBoolean) },
         yearOfBirth: { type: new GraphQLNonNull(GraphQLInt) },
         memberTypeId: { type: new GraphQLNonNull(MemberTypeIdEnum) },
-        userId: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(UUIDType) },
     }),
 });
+
+
+export const ChangeProfileInput = new GraphQLInputObjectType({
+    name: 'ChangeProfileInput',
+    fields: () => ({
+      isMale: { type: GraphQLBoolean },
+      yearOfBirth: { type: GraphQLInt },
+      memberTypeId: { type: MemberTypeIdEnum },
+    }),
+  });

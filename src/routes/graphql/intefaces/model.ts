@@ -1,3 +1,5 @@
+import { MemberTypeId } from "../../member-types/schemas.js";
+
 export interface User {
     id: string;
     name: string;
@@ -9,7 +11,7 @@ export interface User {
     isMale: boolean;
     yearOfBirth: number;
     userId: string;
-    memberTypeId: string;
+    memberTypeId:  MemberTypeId | string;
 }
 
 
@@ -31,4 +33,22 @@ export interface CreateProfileInputDTO {
   yearOfBirth: number;
   memberTypeId: string;
   userId: string;
+}
+
+
+export interface ChangeUserInputDTO {
+  name?: string;
+  balance?: number;
+}
+
+export interface ChangePostInputDTO {
+  title: string;
+  content: string;
+}
+
+
+export interface ChangeProfileInputDTO {
+  isMale: boolean;
+  yearOfBirth: number;
+  memberTypeId: string
 }

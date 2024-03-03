@@ -1,9 +1,12 @@
 import { GraphQLNonNull } from "graphql";
-import { CreatePostInput, PostType } from "../types/posttypes.js";
-import { CreateUserInput, UserType } from "../types/userstypes.js";
+import { ChangePostInput, CreatePostInput, PostType } from "../types/posttypes.js";
+import { ChangeUserInput, CreateUserInput, UserType } from "../types/userstypes.js";
 import { PrismaClient } from "@prisma/client";
-import { CreateProfileInput, ProfileType } from "../types/profiletypes.js";
-import { CreatePostInputDTO, CreateProfileInputDTO, CreateUserInputDTO } from "../intefaces/model.js";
+import { ChangeProfileInput, CreateProfileInput, ProfileType } from "../types/profiletypes.js";
+import { ChangePostInputDTO, ChangeProfileInputDTO, ChangeUserInputDTO, CreatePostInputDTO, CreateProfileInputDTO, CreateUserInputDTO } from "../intefaces/model.js";
+import { UUIDType } from "../types/uuid.js";
+
+
 
 
 
@@ -14,13 +17,28 @@ export const mutationFields = {
         dto: { type: new GraphQLNonNull(CreateUserInput) },
         },
         resolve: async (_, { dto }: {dto: CreateUserInputDTO }, { prisma }: { prisma: PrismaClient }) => {
-          // const { name, balance } = input as { name: string, balance: number };
           const newUser = await prisma.user.create({
             data: dto
           });
           return newUser;
         },
       },
+
+      changeUser: {
+        type: UserType,
+        args: {
+          id: { type: new GraphQLNonNull(UUIDType) },
+          dto: { type: new GraphQLNonNull(ChangeUserInput) },
+        },
+        resolve: async (_, { id, dto }: { id: string, dto: ChangeUserInputDTO  }, { prisma }: { prisma: PrismaClient }) => {
+          const updatedUser = await prisma.user.update({
+            where: { id },
+            data: dto,
+          });
+          return updatedUser;
+        },
+      },
+
 
 
       createPost: {
@@ -37,6 +55,22 @@ export const mutationFields = {
       },
 
 
+      changePost: {
+        type: PostType,
+        args: {
+          id: { type: new GraphQLNonNull(UUIDType) },
+          dto: { type: new GraphQLNonNull(ChangePostInput) },
+        },
+        resolve: async (_, { id, dto }: { id: string, dto: ChangePostInputDTO }, { prisma }: { prisma: PrismaClient }) => {
+          const updatedPost = await prisma.post.update({
+            where: { id },
+            data: dto,
+          });
+          return updatedPost;
+        },
+      },
+
+
       createProfile: {
         type: ProfileType,
         args: {
@@ -44,11 +78,30 @@ export const mutationFields = {
         },
 
         resolve: async (_, { dto } : {dto: CreateProfileInputDTO}, { prisma }: { prisma: PrismaClient }) => {
-          // const { isMale, yearOfBirth, memberTypeId, userId } = input as { isMale: boolean, yearOfBirth: number, memberTypeId: string, userId: string  };
           const newProfile = await prisma.profile.create({
             data: dto
           });
           return newProfile;
         },
       },
+
+
+    changeProfile: {
+      type: ProfileType,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+
+        dto: { type: new GraphQLNonNull(ChangeProfileInput) },
+
+      },
+
+      resolve: async (_, { id, dto }: { id: string, dto: ChangeProfileInputDTO }, { prisma }: { prisma: PrismaClient }) => {
+        const updatedProfile = await prisma.profile.update({
+          where: { id },
+          data: dto,
+        });
+        return updatedProfile;
+      },
+    },
+
   };
