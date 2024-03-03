@@ -1,8 +1,17 @@
-import { GraphQLFloat, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { UUIDType } from "./uuid.js";
 import { PrismaClient, User } from "@prisma/client/index.js";
 import { PostType } from "./posttypes.js";
 import { ProfileType } from "./profiletypes.js";
+
+
+// export const CreateUserInput = new GraphQLInputObjectType({
+//   name: 'CreateUserInput',
+//   fields: () => ({
+//     name: { type: new GraphQLNonNull(GraphQLString) },
+//     balance: { type: new GraphQLNonNull(GraphQLFloat) },
+//   }),
+// });
 
 
 export const UserType: GraphQLObjectType = new GraphQLObjectType({
@@ -12,11 +21,12 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     name: { type: GraphQLString },
     balance: { type: GraphQLFloat },
 
+
     profile: {
       type: ProfileType,
       resolve: async (parent: User, _, { prisma }: { prisma: PrismaClient }) => {
         const profile = await prisma.profile.findUnique({
-          where: { id: parent.id },
+          where: { userId: parent.id },
         });
 
         return profile;
@@ -40,7 +50,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
           where: {
             userSubscribedTo: {
               some: {
-                subscriberId: parent.id,
+                authorId: parent.id,
               },
             },
           },
