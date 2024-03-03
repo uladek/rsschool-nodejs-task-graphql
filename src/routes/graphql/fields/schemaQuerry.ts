@@ -1,17 +1,17 @@
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
+import { GraphQLList, GraphQLNonNull } from "graphql";
 import { MemberType, MemberTypeIdEnum } from "../types/membertypes.js";
-import { PrismaClient } from "@prisma/client/index.js";
+// import { PrismaClient } from "@prisma/client/index.js";
 import { PostType } from "../types/posttypes.js";
 import { UUIDType } from "../types/uuid.js";
 import { UserType } from "../types/userstypes.js";
 import { ProfileType } from "../types/profiletypes.js";
 
-// const UserType: GraphQLObjectType
+import { PrismaClient } from "@prisma/client";
 
-export const schemaQuery = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'Query',
-    fields: {
+
+
+
+export const queryFields = {
         memberTypes: {
             type: new GraphQLList(MemberType),
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
@@ -117,6 +117,4 @@ export const schemaQuery = new GraphQLSchema({
             return profile;
             },
         },
-        },
-    }),
-});
+};
