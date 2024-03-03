@@ -1,12 +1,17 @@
-import { GraphQLNonNull } from "graphql";
+import { GraphQLBoolean, GraphQLNonNull } from "graphql";
 import { ChangePostInput, CreatePostInput, PostType } from "../types/posttypes.js";
 import { ChangeUserInput, CreateUserInput, UserType } from "../types/userstypes.js";
 import { PrismaClient } from "@prisma/client";
 import { ChangeProfileInput, CreateProfileInput, ProfileType } from "../types/profiletypes.js";
-import { ChangePostInputDTO, ChangeProfileInputDTO, ChangeUserInputDTO, CreatePostInputDTO, CreateProfileInputDTO, CreateUserInputDTO } from "../intefaces/model.js";
+import {
+   ChangePostInputDTO,
+   ChangeProfileInputDTO,
+   ChangeUserInputDTO,
+   CreatePostInputDTO,
+   CreateProfileInputDTO,
+   CreateUserInputDTO
+  } from "../intefaces/model.js";
 import { UUIDType } from "../types/uuid.js";
-
-
 
 
 
@@ -36,6 +41,17 @@ export const mutationFields = {
             data: dto,
           });
           return updatedUser;
+        },
+      },
+
+      deleteUser: {
+        type: GraphQLBoolean,
+        args: {
+          id: { type: new GraphQLNonNull(UUIDType) },
+        },
+        resolve: async (_, { id }: { id: string }, { prisma }: { prisma: PrismaClient }) => {
+          await prisma.user.delete({ where: { id } });
+          return null;
         },
       },
 
@@ -70,6 +86,18 @@ export const mutationFields = {
         },
       },
 
+      deletePost: {
+        type: GraphQLBoolean,
+        args: {
+          id: { type: new GraphQLNonNull(UUIDType) },
+        },
+        resolve: async (_, { id }: { id: string }, { prisma }: { prisma: PrismaClient }) => {
+          await prisma.post.delete({ where: { id } });
+          return null;
+        },
+      },
+
+
 
       createProfile: {
         type: ProfileType,
@@ -103,5 +131,17 @@ export const mutationFields = {
         return updatedProfile;
       },
     },
+
+    deleteProfile: {
+      type: GraphQLBoolean,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+      },
+      resolve: async (_, { id }: { id: string }, { prisma }: { prisma: PrismaClient }) => {
+        await prisma.profile.delete({ where: { id } });
+        return null;
+      },
+    },
+
 
   };
