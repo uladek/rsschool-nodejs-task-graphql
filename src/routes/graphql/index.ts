@@ -26,10 +26,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           prisma,
         }
       });
-      // if (result === null) {
-      //   throw new Error("GraphQL query returned null");
-      // }
-      // console.log("GraphQL query result:", result);
+      if (result === null) {
+        throw new Error("GraphQL query returned null");
+      }
+      console.log("GraphQL query result:", result);
 
       return result;
     },

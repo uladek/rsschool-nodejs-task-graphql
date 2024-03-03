@@ -91,6 +91,8 @@ export const schemaQuery = new GraphQLSchema({
 
 
 
+
+
         profiles: {
             type: new GraphQLList(ProfileType),
             resolve: async (_, __, { prisma }: { prisma: PrismaClient }) => {
