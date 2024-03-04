@@ -1,9 +1,9 @@
 import { GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { UUIDType } from "./uuid.js";
-import { PrismaClient } from "@prisma/client/index.js";
 import { PostType } from "./posttypes.js";
 import { ProfileType } from "./profiletypes.js";
-import { User } from "../intefaces/model.js";
+import {  User } from "../interfaces/model.js";
+import { PrismaClient } from "@prisma/client";
 
 
 export const CreateUserInput = new GraphQLInputObjectType({
@@ -72,10 +72,11 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     userSubscribedTo: {
       type: new GraphQLList(UserType),
       resolve: async (parent: User, _, { prisma }: { prisma: PrismaClient }) => {
+
         const userSubscribedTo = await prisma.user.findMany({
           where: {
             subscribedToUser: {
-              some: {
+             some: {
                 subscriberId: parent.id,
               },
             },
@@ -84,6 +85,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
         return userSubscribedTo;
       },
     },
+
 
   }),
 });

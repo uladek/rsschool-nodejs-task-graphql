@@ -10,7 +10,7 @@ import {
    CreatePostInputDTO,
    CreateProfileInputDTO,
    CreateUserInputDTO
-  } from "../intefaces/model.js";
+  } from "../interfaces/model.js";
 import { UUIDType } from "../types/uuid.js";
 
 
@@ -98,11 +98,11 @@ export const mutationFields = {
       },
 
 
-
       createProfile: {
         type: ProfileType,
         args: {
           dto: { type: new GraphQLNonNull(CreateProfileInput) },
+
         },
 
         resolve: async (_, { dto } : {dto: CreateProfileInputDTO}, { prisma }: { prisma: PrismaClient }) => {
@@ -117,10 +117,8 @@ export const mutationFields = {
     changeProfile: {
       type: ProfileType,
       args: {
-        id: { type: new GraphQLNonNull(UUIDType) },
-
+        id: { type: (UUIDType) },
         dto: { type: new GraphQLNonNull(ChangeProfileInput) },
-
       },
 
       resolve: async (_, { id, dto }: { id: string, dto: ChangeProfileInputDTO }, { prisma }: { prisma: PrismaClient }) => {
@@ -132,6 +130,7 @@ export const mutationFields = {
       },
     },
 
+
     deleteProfile: {
       type: GraphQLBoolean,
       args: {
@@ -142,6 +141,50 @@ export const mutationFields = {
         return null;
       },
     },
+
+
+    subscribeTo: {
+      type: UserType,
+      args: {
+          userId: { type: new GraphQLNonNull(UUIDType) },
+          authorId: { type: new GraphQLNonNull(UUIDType) },
+      },
+      resolve: async (_, { userId, authorId }: { userId: string, authorId: string }, { prisma }: { prisma: PrismaClient }) => {
+        const subscribeTo =  await prisma.user.update({
+              where: { id: userId },
+              data: {
+                  userSubscribedTo: {
+                      create: {
+                          authorId: authorId,
+                      },
+                  },
+              },
+          });
+          return subscribeTo;
+      },
+  },
+
+
+  unsubscribeFrom: {
+      type: GraphQLBoolean,
+      args: {
+          userId: { type: new GraphQLNonNull(UUIDType) },
+          authorId: { type: new GraphQLNonNull(UUIDType) },
+      },
+
+    resolve: async (_, { userId, authorId }: { userId: string, authorId: string }, { prisma }: { prisma: PrismaClient }) => {
+      await prisma.subscribersOnAuthors.delete({
+          where: {
+              subscriberId_authorId: {
+                  subscriberId: userId,
+                  authorId: authorId,
+              },
+          },
+      });
+
+      return null;
+  },
+},
 
 
   };

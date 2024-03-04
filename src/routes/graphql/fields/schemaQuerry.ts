@@ -1,5 +1,5 @@
 import { GraphQLList, GraphQLNonNull } from "graphql";
-import { MemberType, MemberTypeIdEnum } from "../types/membertypes.js";
+import { MemberType, MemberTypeId } from "../types/membertypes.js";
 import { PostType } from "../types/posttypes.js";
 import { UUIDType } from "../types/uuid.js";
 import { UserType } from "../types/userstypes.js";
@@ -20,7 +20,7 @@ export const queryFields = {
         memberType: {
             type: MemberType,
             args: {
-                id: { type: new GraphQLNonNull(MemberTypeIdEnum) }
+                id: { type: new GraphQLNonNull(MemberTypeId) }
             },
             resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
             const { id } = args;

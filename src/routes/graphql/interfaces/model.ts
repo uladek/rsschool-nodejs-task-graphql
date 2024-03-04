@@ -1,19 +1,20 @@
-import { MemberTypeId } from "../../member-types/schemas.js";
+import { MemberTypeId as enumMemberTypeId } from "../../member-types/schemas.js";
 
 export interface User {
     id: string;
     name: string;
     balance: number;
+
   }
+
 
   export interface Profile {
     id: string;
     isMale: boolean;
     yearOfBirth: number;
     userId: string;
-    memberTypeId:  MemberTypeId | string;
+    memberTypeId: enumMemberTypeId | string;
 }
-
 
 // mutation
 
@@ -50,5 +51,5 @@ export interface ChangePostInputDTO {
 export interface ChangeProfileInputDTO {
   isMale: boolean;
   yearOfBirth: number;
-  memberTypeId: string
+  memberTypeId: enumMemberTypeId | string;
 }
