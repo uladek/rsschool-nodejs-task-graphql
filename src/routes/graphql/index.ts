@@ -1,8 +1,11 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { DocumentNode, graphql, parse, validate } from 'graphql';
+import { graphql, parse, validate } from 'graphql';
 import { schema } from './fields/schema.js';
 import  depthLimit from 'graphql-depth-limit';
+import { memberTypeLoader } from './loaders/loaderMemberTypes.js';
+import { userLoader } from './loaders/loaderUser.js';
+import { postLoaderByAuthorId } from './loaders/loaderPost.js';
 
 
 const depthLength = 5;
@@ -10,6 +13,12 @@ const depthLength = 5;
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { prisma } = fastify;
 
+  const loaders = {
+    user: userLoader(prisma),
+    memberType: memberTypeLoader(prisma),
+    // post: postLoader(prisma),
+    postByAuthorId: postLoaderByAuthorId(prisma),
+};
 
   fastify.route({
     url: '/',
@@ -39,6 +48,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         variableValues: variables,
         contextValue: {
           prisma,
+          loaders
+
         },
 
       });
@@ -47,7 +58,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       if (result === null) {
         throw new Error("GraphQL query returned null");
       }
-      console.log("GraphQL query result:", result);
+      // console.log("GraphQL query result:", result);
 
       return result;
     },

@@ -5,6 +5,7 @@ import { UUIDType } from "../types/uuid.js";
 import { UserType } from "../types/userstypes.js";
 import { ProfileType } from "../types/profiletypes.js";
 import { PrismaClient } from "@prisma/client";
+import { LoadersType } from "../interfaces/model.js";
 
 
 export const queryFields = {
@@ -73,16 +74,32 @@ export const queryFields = {
         },
 
 
+        // user: {
+        //     type: UserType,
+        //     args: {
+        //         id: { type: new GraphQLNonNull(UUIDType) },
+        //     },
+        //     resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
+        //         try {
+        //             const { id } = args;
+        //             const user = await prisma.user.findUnique({ where: { id } });
+        //             return user || null;
+        //         } catch (error) {
+        //             console.error("Error fetching user:", error);
+        //             return null;
+        //         }
+        //     },
+        // },
+
         user: {
             type: UserType,
             args: {
                 id: { type: new GraphQLNonNull(UUIDType) },
             },
-            resolve: async (_, args: { id: string }, { prisma }: { prisma: PrismaClient }) => {
+            resolve: async (_, args: { id: string }, { prisma, loaders }: { prisma: PrismaClient, loaders: LoadersType }) => {
                 try {
                     const { id } = args;
-                    const user = await prisma.user.findUnique({ where: { id } });
-                    return user || null;
+                    return loaders.user.load(id);
                 } catch (error) {
                     console.error("Error fetching user:", error);
                     return null;

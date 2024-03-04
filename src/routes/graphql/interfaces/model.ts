@@ -1,12 +1,20 @@
+import DataLoader from "dataloader";
 import { MemberTypeId as enumMemberTypeId } from "../../member-types/schemas.js";
 
 export interface User {
-    id: string;
-    name: string;
-    balance: number;
+  id: string;
+  name: string;
+  balance: number;
+  subscribedToUser?: SubscriberType[];
+  userSubscribedTo?: SubscriberType[];
+}
 
-  }
-
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  authorId?: string;
+}
 
   export interface Profile {
     id: string;
@@ -52,4 +60,22 @@ export interface ChangeProfileInputDTO {
   isMale: boolean;
   yearOfBirth: number;
   memberTypeId: enumMemberTypeId | string;
+}
+
+// loaders
+
+export interface LoadersType {
+  user: DataLoader<string, User>;
+  post?: DataLoader<string, Post[]>;
+  // memberType: DataLoader<string, MemberType>;
+  postByAuthorId: DataLoader<string, Post[]>;
+
+}
+// export interface SubscriberType {
+//   id: string;
+//   subscriberId: string;
+// }
+
+interface SubscriberType {
+  authorId: string;
 }

@@ -164,7 +164,6 @@ export const mutationFields = {
       },
   },
 
-
   unsubscribeFrom: {
       type: GraphQLBoolean,
       args: {
