@@ -24,3 +24,23 @@ export const memberTypeLoader = (prisma: PrismaClient) => new DataLoader(async (
     const idsArray: string[] = ids as string[];
     return batchGetMemberTypes(idsArray, prisma);
 });
+
+
+
+// export const memberTypeLoader = (prisma: PrismaClient) => new DataLoader(async (ids: readonly string[]) => {
+//     const uniqueIds: string[] = Array.from(new Set(ids));
+//     const memberTypes = await prisma.memberType.findMany({
+//         where: {
+//             id: {
+//                 in: uniqueIds,
+//             },
+//         },
+//     });
+
+//     const memberTypeMap: Record<string, MemberType> = {};
+//     memberTypes.forEach((memberType) => {
+//         memberTypeMap[memberType.id] = memberType;
+//     });
+
+//     return ids.map((id) => memberTypeMap[id] || null);
+// });

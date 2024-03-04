@@ -87,21 +87,37 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
 
 
-  // subscribedToUser: {
-  //   type: new GraphQLList(UserType),
-  //   resolve: async (parent: User, _, { prisma, loaders }: { prisma: PrismaClient, loaders?: LoadersType }) => {
-  //     try {
-  //       if (!loaders) {
-  //         throw new Error('Loaders are not available');
-  //       }
-  //       const subscribedToUsers = await loaders.user.load(parent.id);
-  //       return subscribedToUsers?.subscribedToUser || [];
-  //     } catch (error) {
-  //       console.error("Error fetching subscribed users:", error);
-  //       return null;
-  //     }
-  //   },
-  // },
+
+
+    // subscribedToUser: {
+    //   type: new GraphQLList(UserType),
+    //   resolve: async (parent: User, _, { prisma, loaders }: { prisma: PrismaClient, loaders?: LoadersType }) => {
+    //     try {
+    //       if (!parent || !parent.id) {
+    //         throw new Error('Parent object or its id is undefined');
+    //       }
+
+    //       if (!loaders || !loaders.subscribedToUser) {
+    //         throw new Error('SubscribedToUser loader is not available');
+    //       }
+
+    //       const subscribedToUsers = await loaders.subscribedToUser.load(parent.id);
+    //       return subscribedToUsers ?? [];
+    //     } catch (error) {
+    //       console.error("Error fetching users subscribed to:", error);
+    //       return [];
+    //     }
+    //   },
+    // },
+
+
+
+
+
+
+
+
+
 
 
       userSubscribedTo: {
@@ -121,22 +137,6 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
         },
       },
 
-  // userSubscribedTo: {
-  //   type: new GraphQLList(UserType),
-
-  //   resolve: async (parent: User, _, { prisma, loaders }: { prisma: PrismaClient, loaders?: LoadersType }) => {
-  //     try {
-  //       if (!loaders) {
-  //         throw new Error('Loaders are not available');
-  //       }
-  //       const userSubscribedTo = await loaders.user.load(parent.id);
-  //       return userSubscribedTo?.userSubscribedTo || [];
-  //     } catch (error) {
-  //       console.error("Error fetching users subscribed to:", error);
-  //       return null;
-  //     }
-  //   },
-  // },
 
   }),
 });

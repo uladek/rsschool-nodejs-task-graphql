@@ -1,5 +1,6 @@
 import DataLoader from "dataloader";
 import { MemberTypeId as enumMemberTypeId } from "../../member-types/schemas.js";
+import { MemberType } from "@prisma/client";
 
 export interface User {
   id: string;
@@ -7,6 +8,11 @@ export interface User {
   balance: number;
   subscribedToUser?: SubscriberType[];
   userSubscribedTo?: SubscriberType[];
+}
+
+
+interface SubscriberType {
+  authorId: string;
 }
 
 export interface Post {
@@ -67,9 +73,9 @@ export interface ChangeProfileInputDTO {
 export interface LoadersType {
   user: DataLoader<string, User>;
   post?: DataLoader<string, Post[]>;
-  // memberType: DataLoader<string, MemberType>;
+  memberType: DataLoader<string, MemberType | null, string>;
   postByAuthorId: DataLoader<string, Post[]>;
-
+  subscribedToUser: DataLoader<string, User[]>;
 }
 // export interface SubscriberType {
 //   id: string;

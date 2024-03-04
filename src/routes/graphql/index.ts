@@ -6,6 +6,7 @@ import  depthLimit from 'graphql-depth-limit';
 import { memberTypeLoader } from './loaders/loaderMemberTypes.js';
 import { userLoader } from './loaders/loaderUser.js';
 import { postLoaderByAuthorId } from './loaders/loaderPost.js';
+import { subscribedToUserLoader } from './loaders/loaderSsubsribeToUser.js';
 
 
 const depthLength = 5;
@@ -16,8 +17,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const loaders = {
     user: userLoader(prisma),
     memberType: memberTypeLoader(prisma),
-    // post: postLoader(prisma),
     postByAuthorId: postLoaderByAuthorId(prisma),
+    subscribedToUserLoader: subscribedToUserLoader(prisma),
 };
 
   fastify.route({

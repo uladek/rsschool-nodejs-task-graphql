@@ -2,7 +2,7 @@ import { GraphQLBoolean, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, Gra
 import { UUIDType } from "./uuid.js";
 import { MemberType, MemberTypeId } from "./membertypes.js";
 import { PrismaClient } from "@prisma/client";
-import { Profile } from "../interfaces/model.js";
+import { LoadersType, Profile } from "../interfaces/model.js";
 
 
 export const ProfileType = new GraphQLObjectType({
@@ -14,19 +14,37 @@ export const ProfileType = new GraphQLObjectType({
         userId: { type: UUIDType },
         memberTypeId: { type: MemberTypeId },
 
+        // memberType: {
+        //     type: MemberType,
+        //     resolve: async (parent: Profile, _, { prisma }: { prisma: PrismaClient }) => {
+        //         const { memberTypeId } = parent;
+        //         if (!memberTypeId) {
+        //             throw new Error('Missing memberTypeId');
+        //         }
+        //         const memberType = await prisma.memberType.findUnique({
+        //             where: { id: memberTypeId }
+        //         });
+        //         return memberType;
+        //     }
+        // },
+
         memberType: {
             type: MemberType,
-            resolve: async (parent: Profile, _, { prisma }: { prisma: PrismaClient }) => {
+            resolve: async (parent: Profile, _, { prisma, loaders }: { prisma: PrismaClient, loaders: LoadersType }) => {
                 const { memberTypeId } = parent;
                 if (!memberTypeId) {
                     throw new Error('Missing memberTypeId');
                 }
-                const memberType = await prisma.memberType.findUnique({
-                    where: { id: memberTypeId }
-                });
-                return memberType;
+                try {
+                    const memberType = await loaders.memberType.load(memberTypeId);
+                    return memberType || null;
+                } catch (error) {
+                    console.error("Error fetching member type:", error);
+                    return null;
+                }
             }
         },
+
     }),
 });
 
